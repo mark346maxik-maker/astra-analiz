@@ -1,0 +1,12 @@
+{
+  "name": "astraanaliz",
+  "version": "1.0.0",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "circular-natal-horoscope-js": "^1.0.4",
+    "express": "^4.19.2"
+  }
+}

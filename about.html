@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Астрологический помощник - Ввод данных</title>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --accent-color: #8b5cf6;
+            --accent-hover: #7c3aed;
+            --text-color: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: #334155;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        
+        body { 
+            background-color: var(--bg-color); 
+            color: var(--text-color); 
+            padding: 16px 12px; 
+            display: flex; 
+            justify-content: center; 
+            min-height: 100vh; 
+            flex-direction: column; 
+            align-items: center; 
+            overflow-x: hidden; 
+            position: relative;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-image: url('images/bg.jpg');
+            background-size: cover;
+            background-position: center;
+            z-index: -1;
+        }
+
+        .container { 
+            width: 100%; 
+            max-width: 380px; 
+            display: flex; 
+            flex-direction: column; 
+            gap: 20px; 
+            flex: 1; 
+        }
+
+        h1 { text-align: center; font-size: 1.5rem; color: var(--accent-color); }
+        .subtitle { text-align: center; font-size: 0.875rem; color: var(--text-muted); margin-bottom: 10px; }
+        
+        .card { 
+            background-color: var(--card-bg); 
+            padding: 25px; 
+            border-radius: 12px; 
+            border: 1px solid var(--border-color); 
+            width: 100%;
+            max-width: 100%; 
+            overflow: hidden; 
+        }
+
+        .card-title { font-size: 1.1rem; margin-bottom: 12px; color: var(--accent-color); border-bottom: 1px solid var(--border-color); padding-bottom: 6px; }
+        .form-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; width: 100%; }
+        
+        label { font-size: 0.85rem; color: var(--text-muted); }
+        .range-header { display: flex; justify-content: space-between; align-items: center; }
+        .range-value { color: var(--accent-color); font-weight: 600; }
+        
+        input[type="range"] { width: 100%; accent-color: var(--accent-color); cursor: pointer; margin-top: 4px; }
+        
+        input[type="text"], input[type="date"], input[type="time"] {
+            width: 80%;            
+            margin: 0 auto;            
+            display: block;            
+            box-sizing: border-box;    
+            padding: 12px 14px;        
+            
+            -webkit-appearance: none;  
+            appearance: none;
+            border-radius: 12px;       
+            
+            border: 1px solid var(--border-color);
+            background-color: #0f172a; 
+            color: var(--text-color);  
+            font-size: 0.95rem;
+        }
+
+        input:disabled { opacity: 0.5; cursor: not-allowed; }
+        .checkbox-group { display: flex; align-items: center; gap: 8px; margin-top: 4px; }
+        
+        .btn { width: 100%; padding: 14px; border: none; border-radius: 8px; background-color: var(--accent-color); color: white; font-size: 1rem; font-weight: 600; cursor: pointer; }
+        .btn:hover { background-color: var(--accent-hover); }
+
+        footer {
+            width: 100%;
+            max-width: 380px;
+            text-align: center;
+            margin-top: 30px;
+            padding: 16px 0;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            border-top: 1px solid var(--border-color);
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div>
+        <h1>Астрологический помощник</h1>
+        <p class="subtitle">Ввод данных для расчета карты</p>
+    </div>
+
+    <!-- Клиент -->
+    <div class="card">
+        <h2 class="card-title">Мои данные</h2>
+        <div class="form-group">
+            <label>Дата рождения</label>
+            <input type="date" id="p1-date" required onchange="saveFormData()">
+        </div>
+        <div class="form-group">
+            <label>Время рождения</label>
+            <input type="time" id="p1-time" value="12:00" onchange="saveFormData()">
+        </div>
+        <div class="form-group">
+            <label>Место рождения</label>
+            <input type="text" id="p1-place" placeholder="Город, страна" oninput="saveFormData()">
+            <div class="checkbox-group">
+                <input type="checkbox" id="p1-unknown-place" onchange="togglePlace(1)">
+                <label for="p1-unknown-place">Не знаю место рождения</label>
+            </div>
+        </div>
+    </div>
+
+    <!-- Партнер -->
+    <div class="card">
+        <h2 class="card-title">Ситуация</h2>
+        <div class="form-group">
+            <label>Дата</label>
+            <input type="date" id="p2-date" required onchange="saveFormData()">
+        </div>
+        <div class="form-group">
+            <label>Время</label>
+            <input type="time" id="p2-time" value="12:00" onchange="saveFormData()">
+        </div>
+        <div class="form-group">
+            <label>Место</label>
+            <input type="text" id="p2-place" placeholder="Город, страна" oninput="saveFormData()">
+            <div class="checkbox-group">
+                <input type="checkbox" id="p2-unknown-place" onchange="togglePlace(2)">
+                <label for="p2-unknown-place">среднее значение</label>
+            </div>
+        </div>
+    </div>
+
+    <!-- Настройки -->
+    <div class="card">
+        <div class="form-group">
+            <div class="range-header">
+                <label for="orbis-range">Размер орбиса:</label>
+                <span class="range-value" id="orbis-val">1°</span>
+            </div>
+            <input type="range" id="orbis-range" min="0" max="1" step="0.1" value="1" oninput="updateOrbisValue(this.value)">
+        </div>
+    </div>
+
+    <button class="btn" onclick="goToAstra()">Рассчитать</button>
+</div>
+
+<footer>
+    <p>Самозанятый (НПД) Марков</p>
+    <p>ИНН: 615501212706</p>
+    <p style="margin-top: 4px;">astraanaliz.ru</p>
+</footer>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        loadFormData();
+    });
+
+    function updateOrbisValue(val) {
+        document.getElementById('orbis-val').textContent = val + '°';
+        saveFormData();
+    }
+
+    function togglePlace(personNum) {
+        const checkbox = document.getElementById(`p${personNum}-unknown-place`);
+        const placeInput = document.getElementById(`p${personNum}-place`);
+        const timeInput = document.getElementById(`p${personNum}-time`);
+
+        if (checkbox.checked) {
+            placeInput.value = "Неизвестно";
+            placeInput.disabled = true;
+            timeInput.value = "12:00";
+            timeInput.disabled = true;
+        } else {
+            placeInput.value = "";
+            placeInput.disabled = false;
+            timeInput.disabled = false;
+        }
+        saveFormData();
+    }
+
+    function saveFormData() {
+        const formData = {
+            p1Date: document.getElementById('p1-date').value,
+            p1Time: document.getElementById('p1-time').value,
+            p1Place: document.getElementById('p1-place').value,
+            p1Unknown: document.getElementById('p1-unknown-place').checked,
+
+            p2Date: document.getElementById('p2-date').value,
+            p2Time: document.getElementById('p2-time').value,
+            p2Place: document.getElementById('p2-place').value,
+            p2Unknown: document.getElementById('p2-unknown-place').checked,
+
+            orbis: document.getElementById('orbis-range').value
+        };
+        localStorage.setItem('synastry_form_data', JSON.stringify(formData));
+    }
+
+    function loadFormData() {
+        const savedData = localStorage.getItem('synastry_form_data');
+        if (!savedData) return;
+
+        const data = JSON.parse(savedData);
+        if (data.p1Date) document.getElementById('p1-date').value = data.p1Date;
+        if (data.p1Time) document.getElementById('p1-time').value = data.p1Time;
+        if (data.p1Place) document.getElementById('p1-place').value = data.p1Place;
+        if (data.p1Unknown !== undefined) {
+            document.getElementById('p1-unknown-place').checked = data.p1Unknown;
+            if (data.p1Unknown) {
+                document.getElementById('p1-place').disabled = true;
+                document.getElementById('p1-time').disabled = true;
+            }
+        }
+
+        if (data.p2Date) document.getElementById('p2-date').value = data.p2Date;
+        if (data.p2Time) document.getElementById('p2-time').value = data.p2Time;
+        if (data.p2Place) document.getElementById('p2-place').value = data.p2Place;
+        if (data.p2Unknown !== undefined) {
+            document.getElementById('p2-unknown-place').checked = data.p2Unknown;
+            if (data.p2Unknown) {
+                document.getElementById('p2-place').disabled = true;
+                document.getElementById('p2-time').disabled = true;
+            }
+        }
+
+        if (data.orbis !== undefined) {
+            document.getElementById('orbis-range').value = data.orbis;
+            document.getElementById('orbis-val').textContent = data.orbis + '°';
+        }
+    }
+
+    async function goToAstra() {
+        const p1Date = document.getElementById('p1-date').value;
+        const p2Date = document.getElementById('p2-date').value;
+
+        if (!p1Date || !p2Date) {
+            alert('Заполните даты рождения обоих людей.');
+            return;
+        }
+
+        saveFormData();
+
+        let clientId = localStorage.getItem('astra_client_id');
+        if (!clientId) {
+            clientId = 'client_' + Math.random().toString(36).substring(2, 11);
+            localStorage.setItem('astra_client_id', clientId);
+        }
+
+        try {
+            const response = await fetch('/api/calculate', {
+                method: 'POST',
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'x-client-id': clientId 
+                },
+                body: JSON.stringify({
+                    p1Date,
+                    p1Time: document.getElementById('p1-time').value,
+                    p1Place: document.getElementById('p1-place').value,
+                    p2Date,
+                    p2Time: document.getElementById('p2-time').value,
+                    p2Place: document.getElementById('p2-place').value,
+                    orbis: document.getElementById('orbis-range').value
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error('Ошибка при расчете.');
+            }
+
+            // Переходим на страницу результатов (убедитесь, что файл называется astra.html)
+            window.location.href = 'astra.html';
+
+        } catch (err) {
+            console.error(err);
+            alert('Произошла ошибка соединения с сервером.');
+        }
+    }
+</script>
+
+</body>
+</html>

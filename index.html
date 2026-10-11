@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Главная</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #000;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            padding: 40px 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Активный фон */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-image: url('images/bg2.jpg');
+            background-size: cover;
+            background-position: center;
+            z-index: -1;
+        }
+
+        /* Кнопка «Инструкция» сверху */
+        .instruction-btn {
+            padding: 10px 20px;
+            background-color: #000;
+            color: #fff;
+            border: 2px solid #fff;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 16px;
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            margin-bottom: 25px;
+        }
+
+        .instruction-btn:hover {
+            background-color: #fff;
+            color: #000;
+            transform: scale(1.05);
+        }
+
+        /* Центральный блок */
+        .logo-container {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .logo-link {
+            display: inline-block;
+            text-decoration: none;
+        }
+
+        .logo {
+            width: 200px;
+            height: 200px;
+            border: 4px solid #fff;
+            border-radius: 10px;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+            opacity: 0.8;
+        }
+
+        /* Контейнер для кнопок */
+        .action-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            align-items: center;
+            width: 100%;
+        }
+
+        /* Кнопки перехода */
+        .subscribe-btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background-color: #000;
+            color: #fff;
+            border: 2px solid #fff;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 16px;
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-align: center;
+            min-width: 180px;
+        }
+
+        .subscribe-btn:hover {
+            background-color: #fff;
+            color: #000;
+            transform: scale(1.05);
+        }
+
+        /* Кнопка «Канал в телеграм» внизу */
+        .telegram-btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background-color: #000;
+            color: #fff;
+            border: 2px solid #fff;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 16px;
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+            min-width: 200px;
+            text-align: center;
+        }
+
+        .telegram-btn:hover {
+            background-color: #fff;
+            color: #000;
+            transform: scale(1.05);
+        }
+
+        /* Футер с ИНН и юридической информацией */
+        .footer-info {
+            text-align: center;
+            color: #aaa;
+            font-family: Arial, sans-serif;
+            font-size: 13px;
+            margin-top: 15px;
+            line-height: 1.5;
+            max-width: 600px;
+        }
+
+        .footer-info strong {
+            color: #fff;
+        }
+
+        /* Аккордеоны с документами */
+        .docs-section {
+            width: 100%;
+            max-width: 500px;
+            margin-top: 15px;
+            text-align: left;
+        }
+
+        details {
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 6px;
+            margin-bottom: 8px;
+            padding: 10px 12px;
+            font-size: 13px;
+            color: #ddd;
+            cursor: pointer;
+            font-family: Arial, sans-serif;
+        }
+
+        details summary {
+            font-weight: bold;
+            color: #8ab4f8;
+            outline: none;
+        }
+
+        .doc-content {
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px solid #222;
+            font-size: 12px;
+            color: #aaa;
+            line-height: 1.4;
+        }
+    </style>
+</head>
+<body>
+    <!-- Кнопка перехода на страницу инструкции -->
+    <a href="inst.html" class="instruction-btn">Инструкция</a>
+
+    <!-- Центральный блок: Логотип и кнопка входа -->
+    <div class="logo-container">
+       <a href="about.html" class="logo-link">
+            <img src="images/logo.jpg" alt="Логотип" class="logo">
+       </a>
+
+       <!-- Контейнер с прямой кнопкой перехода к расчёту (без паролей и подписок) -->
+       <div id="actionContainer" class="action-container">
+            <a href="about.html" class="subscribe-btn">Перейти к калькулятору</a>
+       </div>
+    </div>
+
+    <!-- Нижний блок: Кнопка Telegram + Реквизиты и документы -->
+    <div style="display: flex; flex-direction: column; align-items: center; gap: 10px; width: 100%;">
+        <a href="https://t.me/astrology_love_bisnes_synastry" target="_blank" class="telegram-btn">Канал в телеграм</a>
+        
+        <div class="footer-info">
+            <strong> Марков </strong><br>
+            ИНН: 615501212706<br>
+            Доступ к ИИ-астрологическому расчету событий.
+        </div>
+
+        <!-- Юридические блоки (аккордеоны) -->
+        <div class="docs-section">
+            <details>
+                <summary>📄 Публичная оферта</summary>
+                <div class="doc-content">
+                    Услуга доступа к сервису предоставляется Самозанятым Марковым Д (ИНН 615501212706).
+                </div>
+            </details>
+
+            <details>
+                <summary>🔒 Политика конфиденциальности</summary>
+                <div class="doc-content">
+                    Введенные данные (дата, время и место рождения) используются исключительно для работы ИИ-калькулятора отношений и не передаются третьим лицам.
+                </div>
+            </details>
+        </div>
+    </div>
+</body>
+</html>

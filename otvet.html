@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Синастрия - Ответ ИИ</title>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --accent-color: #8b5cf6;
+            --text-color: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: #334155;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        body { background-color: var(--bg-color); color: var(--text-color); padding: 16px; display: flex; justify-content: center; }
+        .container { width: 100%; max-width: 480px; display: flex; flex-direction: column; gap: 16px; }
+        h1 { text-align: center; font-size: 1.4rem; color: var(--accent-color); }
+        .card { background-color: var(--card-bg); padding: 16px; border-radius: 12px; border: 1px solid var(--border-color); }
+        .card-title { font-size: 1rem; margin-bottom: 8px; color: var(--accent-color); border-bottom: 1px solid var(--border-color); padding-bottom: 6px; }
+        .result-box { background-color: #0f172a; border: 1px solid var(--border-color); border-radius: 8px; padding: 14px; font-size: 0.95rem; line-height: 1.5; white-space: pre-wrap; }
+        .btn-back { background: none; border: none; color: var(--text-muted); font-size: 0.9rem; cursor: pointer; text-align: left; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- Изменили астра.html на astra (или оставьте то имя файла, которое у вас используется для списка аспектов) -->
+    <button class="btn-back" onclick="window.location.href='astra.html'">← К списку аспектов</button>    
+    <h1>Результат анализа</h1>
+
+    <div class="card">
+        <h2 class="card-title" id="aspect-header">Анализ...</h2>
+        <div class="result-box" id="ai-output">Генерация расшифровки...</div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', generateResponse);
+
+    async function generateResponse() {
+        const reqData = localStorage.getItem('synastry_request');
+        if (!reqData) {
+            window.location.href = 'astra.html';
+            return;
+        }
+
+        const data = JSON.parse(reqData);
+
+        // Подписываем заголовок в зависимости от типа анализа
+        if (data.selectedAspect === 'GENERAL_ANALYSIS') {
+            document.getElementById('aspect-header').textContent = 'Общий анализ всех аспектов';
+        } else {
+            document.getElementById('aspect-header').textContent = data.selectedAspect;
+        }
+
+        const aiOutput = document.getElementById('ai-output');
+
+        try {
+            let clientId = localStorage.getItem('astra_client_id');
+            if (!clientId) {
+                clientId = 'client_' + Math.random().toString(36).substring(2, 11);
+                localStorage.setItem('astra_client_id', clientId);
+            }
+
+            // Запрос на генерацию ответа с передачей данных на сервер
+            const response = await fetch('/api/generate-ai', {
+                method: 'POST',
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'x-client-id': clientId 
+                },
+                body: JSON.stringify({
+                    selectedAspect: data.selectedAspect,
+                    allAspects: data.allAspects,
+                    question: data.question
+                })
+            });
+
+            if (response.status === 403) {
+                alert('Для просмотра результатов необходима активная подписка!');
+                window.location.href = '/'; 
+                return;
+            }
+
+            const result = await response.json();
+
+            if (result.error) {
+                aiOutput.textContent = 'Ошибка: ' + result.error;
+            } else {
+                aiOutput.textContent = result.text || 'Нет ответа от ИИ.';
+            }
+        } catch (err) {
+            console.error(err);
+            aiOutput.textContent = 'Ошибка сети при обращении к серверу.';
+        }
+    }
+</script>
+</body>
+</html>

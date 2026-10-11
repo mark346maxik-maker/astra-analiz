@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Инструкция</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #000;
+            color: #fff;
+            font-family: Arial, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .inst-container {
+            max-width: 680px;
+            width: 100%;
+            background-color: #111;
+            border: 2px solid #333;
+            border-radius: 12px;
+            padding: 35px;
+            text-align: left;
+            box-shadow: 0 10px 30px rgba(255, 255, 255, 0.05);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 26px;
+            color: #fff;
+            letter-spacing: 1px;
+        }
+
+        .intro-text {
+            line-height: 1.6;
+            color: #ccc;
+            margin-bottom: 20px;
+            font-size: 15px;
+        }
+
+        .instruction-step {
+            margin-bottom: 20px;
+            line-height: 1.6;
+            color: #ddd;
+            font-size: 15px;
+        }
+
+        .instruction-step strong {
+            color: #fff;
+            display: block;
+            margin-bottom: 6px;
+            font-size: 16px;
+        }
+
+        .planets-list {
+            margin: 10px 0 15px 15px;
+            list-style-type: none;
+        }
+
+        .planets-list li {
+            margin-bottom: 6px;
+            color: #bbb;
+            font-size: 14px;
+        }
+
+        .example-box {
+            background-color: #1a1a1a;
+            border-left: 3px solid #666;
+            padding: 12px 15px;
+            margin: 10px 0;
+            border-radius: 0 8px 8px 0;
+            color: #ccc;
+            font-size: 14px;
+        }
+
+        .btn-container {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        /* Кнопка «Вернуться» внизу */
+        .back-btn {
+            display: inline-block;
+            padding: 12px 35px;
+            background-color: #fff;
+            color: #000;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background-color: #ccc;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <div class="inst-container">
+        <h1>📜 Как правильно работать с калькулятором событий</h1>
+        
+        <div class="intro-text">
+            Чтобы более точно получить данные, ознакомьтесь с основными правилами:
+        </div>
+
+        <div class="instruction-step">
+            <strong>1️⃣ Настройка орбиса</strong>
+            После оплаты выбраного тарифа обязательно придумайте пароль, буква и 3-5 цифр, это необходимо, в случае если слетит браузер или захотите открыть приложение на другом устройстве, на компьютере или планшете.<br>
+            В случае каких то сбоев или неработы сайта напишите мне: dima04@mail.ru   или в телеграмм канал, или лично мне в телеграмм: @Markov_Dmitryi
+        </div>
+
+        <div class="instruction-step">
+            <strong>2️⃣ Работа с  орбисами</strong>
+            Если Вы поставите орбис на максимум, у Вас выйдет до 5-7 аспектов,напишите подробный вопрос в окошке и потом нажимайте на кнопки и получайте характеристики аспектов.<br>
+            Вам может показаться противоречие одно другому, но разные аспекты могут работать в зависимости от сферы деятельности и Вашей реакции на ситуацию.
+            
+            <div class="example-box">
+                <strong>Пример:</strong>Покупки могут сработать положительно, а работа может быть в напряжении,или обшение идёт в раздражительном ключе, а дома всё отлично...<br>
+                • <em>Например</em> — кнопка напряжение...<br>
+                • <em>Марс</em> — Действие, активность.<br>
+                • <em>Нептун</em> — сильные желания, крупные ресурсы, финансы.<br>
+                Если Вы в этот день будете проявлять максимальную активность, финансы и ресурсы могут быть под вопросом, Ваша импульсивная активность наоборот навредит Вам.
+            </div>
+        </div>
+
+        <div class="instruction-step">
+            <strong>3️⃣ Базовые ключи значений планет (для информации)</strong>
+            <ul class="planets-list">
+                <li>☀️ <strong>Солнце:</strong> Это я, проявление себя как короля, дневное время.</li>
+                <li>🌙 <strong>Луна:</strong> Душевные эмоции, дом, вечер.</li>
+                <li>☿ <strong>Меркурий:</strong> Читать, звонить, общаться.</li>
+                <li>♀ <strong>Венера:</strong> Нравиться, товары красоты, подарки.</li>
+                <li>♂ <strong>Марс:</strong> Делать, активность, спорт.</li>
+                <li>🌾 <strong>Церера:</strong> Верить, мечтать.</li>
+                <li>♃ <strong>Юпитер:</strong> Люди, видеть, наблюдать.</li>
+                <li>♄ <strong>Сатурн:</strong> Работа, структура, ограничение.</li>
+                <li>♅ <strong>Уран:</strong> Обучать, далеко ехать, внезапно.</li>
+                <li>♆ <strong>Нептун:</strong> Хотеть, крупные ресурсы, финансы.</li>
+                <li>♇ <strong>Плутон:</strong> Другой человек, партнёр, суды, обвинять.</li>
+                <li>🪐 <strong>Эрида:</strong> Помогать, копаться в мелочах.</li>
+            </ul>
+            В итоге, когда Вы нажимаете кнопку и задаёте вопрос, Вы получаете ответ по тому аспекту, который действует на данный период.
+        </div>
+
+        <div class="instruction-step">
+            <strong>4️⃣ Правильные вопросы</strong>
+            Обязательно задавайте правильные вопросы — тогда Вы получите точный ответ с рекомендациями. 💡
+        </div>
+        
+        <!-- Кнопка возврата на главный экран -->
+        <div class="btn-container">
+            <a href="index.html" class="back-btn">← Вернуться</a>
+        </div>
+    </div>
+</body>
+</html>

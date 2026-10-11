@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Астрологический помощник</title>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --accent-color: #8b5cf6;
+            --accent-hover: #7c3aed;
+            --text-color: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: #334155;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        body { background-color: var(--bg-color); color: var(--text-color); padding: 16px; display: flex; justify-content: center; }
+        .container { width: 100%; max-width: 480px; display: flex; flex-direction: column; gap: 16px; }
+        h1 { text-align: center; font-size: 1.4rem; color: var(--accent-color); }
+        .card { background-color: var(--card-bg); padding: 16px; border-radius: 12px; border: 1px solid var(--border-color); }
+        .card-title { font-size: 1rem; margin-bottom: 12px; color: var(--accent-color); border-bottom: 1px solid var(--border-color); padding-bottom: 6px; }
+        .aspects-container { display: flex; flex-direction: column; gap: 8px; }
+        .aspect-btn {
+            color: #000; border: none; font-weight: bold;
+            padding: 12px 14px; border-radius: 8px; font-size: 0.95rem; cursor: pointer; text-align: center; width: 100%;
+            transition: opacity 0.2s ease;
+        }
+        .aspect-btn:hover { opacity: 0.85; }
+        .form-group { display: flex; flex-direction: column; gap: 6px; }
+        label { font-size: 0.85rem; color: var(--text-muted); }
+        textarea { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); background-color: #0f172a; color: var(--text-color); font-size: 0.95rem; resize: vertical; min-height: 150px; }
+        .btn-back { background: none; border: none; color: var(--text-muted); font-size: 0.9rem; cursor: pointer; text-align: left; }
+        
+        /* Стили для кнопки общего анализа */
+        .general-analysis-btn {
+            background-color: var(--accent-color);
+            color: #fff;
+            border: none;
+            font-weight: bold;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            text-align: center;
+            width: auto;       /* Убирает растягивание на 100% */
+            max-width: 250px;  /* Ограничивает максимальную ширину */
+            margin: 0 auto;    /* Центрирует кнопку по горизонтали */
+            display: block;    /* Требуется для корректной работы margin: 0 auto */
+            transition: background-color 0.2s ease;
+        }
+        .general-analysis-btn:hover {
+            background-color: var(--accent-hover);
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <button class="btn-back" onclick="window.location.href='index.html'">← На главную</button>
+    <h1>Найденные аспекты</h1>
+
+    <div class="card">
+        <h2 class="card-title">Выберите аспект для анализа</h2>
+        <div class="aspects-container" id="aspects-list">Рассчитываем аспекты...</div>
+    </div>
+
+    <div class="card">
+        <h2 class="card-title">Дополнительный вопрос к аспекту</h2>
+        <div class="form-group">
+            <label>Уточняющий вопрос (необязательно)</label>
+            <textarea id="user-question" placeholder="Например: Как пройдёт встреча? на что обратить внимание при поездке...При финансовых операциях...Почему у меня сейчас такая ситуация в жизни...Чего ожидать в этот период..."></textarea>
+        </div>
+    </div>
+
+    <button class="general-analysis-btn" id="general-analysis-btn" onclick="triggerGeneralAnalysis()">Общий анализ</button>
+</div>
+
+<script>
+    let cachedAspects = [];
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const savedQuestion = localStorage.getItem('astra_user_question');
+        if (savedQuestion) {
+            document.getElementById('user-question').value = savedQuestion;
+        }
+
+        document.getElementById('user-question').addEventListener('input', (e) => {
+            localStorage.setItem('astra_user_question', e.target.value);
+        });
+
+        fetchAspects();
+    });
+
+    async function fetchAspects() {
+        const savedData = localStorage.getItem('synastry_form_data');
+        if (!savedData) {
+            document.getElementById('aspects-list').innerHTML = 
+                '<span style="color: #ef4444;">Данные ввода не найдены. Заполните форму.</span>';
+            return;
+        }
+
+        try {
+            let clientId = localStorage.getItem('astra_client_id');
+            if (!clientId) {
+                clientId = 'client_' + Math.random().toString(36).substring(2, 11);
+                localStorage.setItem('astra_client_id', clientId);
+            }
+
+            const response = await fetch('/api/calculate', {
+                method: 'POST',
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'x-client-id': clientId 
+                },
+                body: savedData
+            });
+
+            const result = await response.json();
+            if (result.error) {
+                document.getElementById('aspects-list').innerHTML = `<span style="color: #ef4444;">${result.error}</span>`;
+            } else {
+                cachedAspects = result.aspects || [];
+                renderButtons(cachedAspects);
+            }
+        } catch (err) {
+            document.getElementById('aspects-list').innerHTML = 
+                '<span style="color: #ef4444;">Ошибка запроса к серверу.</span>';
+            }
+    }
+function renderButtons(aspects) {
+        const container = document.getElementById('aspects-list');
+        container.innerHTML = '';
+
+        if (aspects.length === 0) {
+            container.innerHTML = '<span>Мажорных аспектов в пределах указанного орбиса не найдено.</span>';
+            return;
+        }
+
+        aspects.forEach(asp => {
+            const btn = document.createElement('button');
+            btn.className = 'aspect-btn';
+
+            let bgColor = '#334155';
+            if (asp.includes('☌')) bgColor = '#eab308';
+            else if (asp.includes('⚹')) bgColor = '#38bdf8';
+            else if (asp.includes('□')) bgColor = '#ef4444';
+            else if (asp.includes('△')) bgColor = '#22c55e';
+            else if (asp.includes('⚻')) bgColor = '#f97316';
+            else if (asp.includes('☍')) bgColor = '#991b1b';
+
+            btn.style.backgroundColor = bgColor;
+
+            // Извлекаем планеты из строки аспекта
+            let situationPlanetSymbol = '';
+            let natalPlanetName = '';
+
+            try {
+                const parts = asp.split('—').map(p => p.trim());
+                if (parts.length >= 6) {
+                    situationPlanetSymbol = parts[1]; // планета ситуация с символом слева
+                    natalPlanetName = parts[5];       // натальная планета справа
+                }
+            } catch (e) {
+                console.error('Ошибка парсинга аспекта:', e);
+            }
+
+            // На кнопке видны ТОЛЬКО две планеты (например: "солнце ☀ — луна 🌙")
+            btn.textContent = `${situationPlanetSymbol} — ${natalPlanetName}`;
+
+            btn.onclick = () => selectAspectAndProceed(asp, aspects);
+            container.appendChild(btn);
+        });
+    }
+
+    function selectAspectAndProceed(selectedAspect, allAspects) {
+        const question = document.getElementById('user-question').value;
+        const requestPayload = { selectedAspect, allAspects, question };
+        
+        localStorage.setItem('synastry_request', JSON.stringify(requestPayload));
+        window.location.href = 'otvet.html';
+    }
+
+    function triggerGeneralAnalysis() {
+        const question = document.getElementById('user-question').value;
+        const requestPayload = { 
+            selectedAspect: 'GENERAL_ANALYSIS', 
+            allAspects: cachedAspects, 
+            question 
+        };
+        
+        localStorage.setItem('synastry_request', JSON.stringify(requestPayload));
+        window.location.href = 'otvet.html';
+    }
+</script>
+
+</body>
+</html>
